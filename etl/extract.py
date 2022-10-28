@@ -36,16 +36,17 @@ def write_to_s3(file_name, data):
 def extract_summary_data(api, extraction_date):
     try:
         activity_data = api.get_stats(extraction_date)
-        write_to_json(f"activity_data_{extraction_date}", activity_data)
+        return activity_data
     except (
         GarminConnectConnectionError,
         GarminConnectAuthenticationError,
         GarminConnectTooManyRequestsError,
     ) as err:
         logger.error("Error occurred during summary data extraction: %s", err)
+        return
 
 
-def extract_load_data(extraction_date):
+def extract_data(extraction_date):
     try:
         # API
 
@@ -56,9 +57,10 @@ def extract_load_data(extraction_date):
         ## Login to Garmin Connect portal
         api.login()
 
-        extract_summary_data(api, extraction_date)
+        data = extract_summary_data(api, extraction_date)
 
         api.logout()
+        return data
 
     except (
         GarminConnectConnectionError,
@@ -66,10 +68,12 @@ def extract_load_data(extraction_date):
         GarminConnectTooManyRequestsError,
     ) as err:
         logger.error("Error occurred during login: %s", err)
+        return
 
 
 if __name__ == "__main__":
     extraction_date = "2022-10-01"
     extraction_date = datetime.strptime(extraction_date, "%Y-%m-%d")
 
-    extract_load_data(extraction_date)
+    data = extract_data(extraction_date)
+    print(data)

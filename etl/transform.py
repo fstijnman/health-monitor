@@ -1,17 +1,17 @@
 import json
+from datetime import datetime
+from extract import extract_data
 
 
-def getData(file, req_columns):
-    with open(file) as json_file:
-        rawData = json.load(json_file)
-        summaryData = {}
-        for col in req_columns:
-            summaryData[col] = rawData[col]
+def getReqColumns(data, req_columns):
+    summaryData = {}
+    for col in req_columns:
+        summaryData[col] = data[col]
 
     return summaryData
 
 
-def getSummaryData(file):
+def getSummaryData(data):
     required_columns = [
         "calendarDate",
         "minHeartRate",
@@ -27,10 +27,13 @@ def getSummaryData(file):
         "bodyBatteryChargedValue",
         "bodyBatteryDrainedValue",
     ]
-    data = getData(file, required_columns)
-    return data
+    summaryData = getReqColumns(data, required_columns)
+    return summaryData
 
 
 if __name__ == "__main__":
-    data = getSummaryData("data/activity_data_2022-10-01 00:00:00.json")
+    extraction_date = "2022-10-01"
+    extraction_date = datetime.strptime(extraction_date, "%Y-%m-%d")
+    data = extract_data(extraction_date)
+    data = getSummaryData(data)
     print(data)
