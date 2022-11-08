@@ -1,9 +1,15 @@
 import json
 from datetime import datetime
+import logging
+
 from extract import extract_data
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def getReqColumns(data, req_columns):
+    logging.info("Extracting required columns...")
     summaryData = {}
     for col in req_columns:
         summaryData[col] = data[col]

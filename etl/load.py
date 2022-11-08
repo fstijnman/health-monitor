@@ -10,12 +10,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def loadDataS3(extraction_date, data, bucket):
+def loadDataS3(extraction_date_str, data, bucket):
     logging.info("loading data in S3...")
     s3 = boto3.client("s3")
     filename = extraction_date_str + "_summarydata.json"
     json_object = json.dumps(data, indent=4)
     s3.put_object(Body=json_object, Bucket=bucket, Key=filename)
+    logging.info("Loaded data into S3")
     return
 
 
