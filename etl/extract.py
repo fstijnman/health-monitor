@@ -4,7 +4,6 @@ from asyncore import write
 import os
 import logging
 from datetime import datetime
-from dotenv import load_dotenv
 import json
 
 from garminconnect import (
@@ -18,9 +17,6 @@ from garminconnect import (
 # Configure debug logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Load Garmin Connect credentials from environment variables
-load_dotenv()
 
 
 def extract_summary_data(api, extraction_date):
